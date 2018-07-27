@@ -1,0 +1,16 @@
+{
+  "name": "pi-homekit",
+  "version": "1.0.0",
+  "description": "Add the Raspberry Pi as an accessory in the Apple Homekit",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Shenglong Zhang",
+  "license": "ISC",
+  "dependencies": {
+    "hap-nodejs": "^0.4.47",
+    "node-persist": "^0.0.11",
+    "qrcode-terminal": "^0.12.0"
+  }
+}
