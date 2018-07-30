@@ -29,3 +29,9 @@ sudo systemctl daemon-reload
 sudo systemctl start pihomekit
 sudo systemctl status pihomekit
 ```
+
+Use `journalctl` to check logs:
+
+```bash
+journalctl -u pihomekit -f
+```

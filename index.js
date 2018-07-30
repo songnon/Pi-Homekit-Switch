@@ -3,7 +3,8 @@ var uuid = require("hap-nodejs").uuid;
 var Accessory = require("hap-nodejs").Accessory;
 var Service = require("hap-nodejs").Service;
 var Characteristic = require("hap-nodejs").Characteristic;
-var qrcode = require('qrcode-terminal');
+// var qrcode = require('qrcode-terminal');
+var qrcode = require('qrcode');
 var exec = require('child_process').exec;
 
 var err = null; // in case there were any problems
@@ -152,8 +153,15 @@ piSwitch.publish({
   pincode: piSwitch.pincode,
 });
 
-// print the QRCode
-qrcode.generate(piSwitch.setupURI());
+// Generate the QRCode
+console.log(piSwitch.setupURI());
+qrcode.toFile('QRCODE.txt', piSwitch.setupURI(), err => {
+    if (err) {
+        console.log("Failed to Generate QRCODE.");
+    } else {
+        console.log('QRCODE.txt has been generated.')
+    }
+});
 
 var signals = { 'SIGINT': 2, 'SIGTERM': 15 };
 Object.keys(signals).forEach(function (signal) {
