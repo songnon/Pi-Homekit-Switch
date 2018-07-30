@@ -1,10 +1,10 @@
-var storage = require('node-persist');
 var hap = require("hap-nodejs")
 var uuid = require("hap-nodejs").uuid;
 var Accessory = require("hap-nodejs").Accessory;
 var Service = require("hap-nodejs").Service;
 var Characteristic = require("hap-nodejs").Characteristic;
 var qrcode = require('qrcode-terminal');
+var exec = require('child_process').exec;
 
 var err = null; // in case there were any problems
 
@@ -13,7 +13,6 @@ console.log("Pi-Switch starting...");
 
 // Initialize our storage system
 hap.init();
-// storage.initSync();
 
 // here's a fake hardware device that we'll expose to HomeKit
 var PI_SWITCH = {
@@ -29,19 +28,25 @@ var PI_SWITCH = {
             console.log("...Pi is now on.");
         } else {
             PI_SWITCH.powerOn = false;
+            exec("sudo shutdown -h now", (err, stdout, stderr) => {
+                console.log(err, stdout, stderr);
+            });
             if (err) { return console.log(err); }
-            console.log("...Pi is now off.");
+            console.log("...Pi is going to off.");
         }
     },
     setReboot: () => {
         console.log("exectuing sudo reboot!!!!");
         this.isRebooting = true;
-        setTimeout(() => {
-            this.isRebooting = false;
-            console.log('reboot done!!');
-            piSwitch.getService("Switch Reboot")
-                .updateCharacteristic(Characteristic.On, piSwitch.isRebooting);
-        }, 2000);
+        exec("sudo reboot", (err, stdout, stderr) => {
+            console.log(err, stdout, stderr);
+        });
+        // setTimeout(() => {
+        //     this.isRebooting = false;
+        //     console.log('reboot done!!');
+        //     piSwitch.getService("Switch Reboot")
+        //         .updateCharacteristic(Characteristic.On, piSwitch.isRebooting);
+        // }, 2000);
     },
     identify: function () {
         console.log("Identify the Pi.");
